@@ -17,3 +17,12 @@ class Hospital(db.Model):
   def __init__(self, name, address=None):
     self.name = name
     self.address = address
+
+  @property
+  def to_json(self):
+    return {
+      "id": self.id,
+      "name": self.name,
+      "address": self.address,
+      "patients": [patient.to_json for patient in self.patients],
+    }
