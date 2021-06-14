@@ -20,7 +20,7 @@ export default class PatientForm extends React.Component {
 
   componentDidUpdate(prevProps) {
     if ((!prevProps.patient && this.props.patient) || (prevProps.patient?.id !== this.props.patient?.id)) {
-      this.updateForSelectedPatient();
+      this.updateSelectedPatient();
     }
   }
 
@@ -33,7 +33,7 @@ export default class PatientForm extends React.Component {
     });
   }
   
-  updateForSelectedPatient() {
+  updateSelectedPatient() {
     this.setState({
       firstName: this.props.patient ? this.props.patient.first_name : '',
       lastName: this.props.patient ? this.props.patient.last_name : '',
