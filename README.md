@@ -30,3 +30,7 @@ Note, I was using:
 * Complete CRUD functionality from HospitalIndex.js
 * Add styling to application
 * Add frontend validation & error toast messages
+
+* Be more explicit with backend errors and do not expose exceptions with str(e)
+* Add backend application logging
+* Could break hospital and patient endpoints into separate Flask blueprints
