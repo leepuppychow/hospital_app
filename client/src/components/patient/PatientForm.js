@@ -9,6 +9,7 @@ export default class PatientForm extends React.Component {
       firstName: '',
       lastName: '',
       selectedHospitalId: '',
+      selectedPatient: null,
     }
 
     this.firstNameChanged = this.firstNameChanged.bind(this);
@@ -22,12 +23,22 @@ export default class PatientForm extends React.Component {
       this.updateForSelectedPatient();
     }
   }
+
+  clearSelectedPatient() {
+    this.setState({
+      firstName: '',
+      lastName: '',
+      selectedHospitalId: '',
+      selectedPatient: null,
+    });
+  }
   
   updateForSelectedPatient() {
     this.setState({
       firstName: this.props.patient ? this.props.patient.first_name : '',
       lastName: this.props.patient ? this.props.patient.last_name : '',
       selectedHospitalId: this.props.patient ? this.props.patient.hospital.id : '',
+      selectedPatient: this.props.patient,
     })
   }
 
@@ -67,28 +78,43 @@ export default class PatientForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <label>Hospital:</label>
-        <select
-          value={this.state.selectedHospitalId}
-          onChange={this.selectedHospitalChanged}
-          disabled={this.props.patient}
+      <div className="patient-form">
+        <div className="patient-form-section">
+          <label>Hospital:</label>
+          <select
+            value={this.state.selectedHospitalId}
+            onChange={this.selectedHospitalChanged}
+            disabled={this.state.selectedPatient}
+          >
+            {this.props.hospitals.map(hospital => (
+              <option
+                key={hospital.id}
+                value={hospital.id}
+              >
+                {hospital.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="patient-form-section">
+          <label>First Name:</label>
+          <input type="text" value={this.state.firstName} onChange={this.firstNameChanged}/>
+        </div>
+        <div className="patient-form-section">
+          <label>Last Name:</label>
+          <input type="text" value={this.state.lastName} onChange={this.lastNameChanged}/>
+        </div>
+        <button 
+          className="primary-btn"
+          onClick={this.createOrUpdate}
         >
-          {this.props.hospitals.map(hospital => (
-            <option
-              key={hospital.id}
-              value={hospital.id}
-            >
-              {hospital.name}
-            </option>
-          ))}
-        </select>
-        <label>First Name:</label>
-        <input type="text" value={this.state.firstName} onChange={this.firstNameChanged}/>
-        <label>Last Name:</label>
-        <input type="text" value={this.state.lastName} onChange={this.lastNameChanged}/>
-        <button onClick={this.createOrUpdate}>
-          {this.props.patient ? 'Edit Patient' : 'Create New Patient'}
+          {this.state.selectedPatient ? 'Edit Patient' : 'Create New Patient'}
+        </button>
+        <button 
+          className="primary-btn"
+          onClick={() => this.clearSelectedPatient()}
+        >
+          Clear Form
         </button>
       </div>
     )
