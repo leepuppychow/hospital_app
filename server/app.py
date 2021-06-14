@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from models import Hospital, Patient
+from controllers import HospitalController
 
 
 @app.route('/api/v1/ping', methods=["GET"])
@@ -22,7 +22,7 @@ def ping():
 @app.route('/api/v1/hospitals', methods=['GET'])
 def get_all_hospitals():
     try:
-        hospitals = Hospital.all()
+        hospitals = HospitalController.all()
         return jsonify([h.to_json for h in hospitals]), 200
     except Exception as e:
         return jsonify({"message": f"Error getting hospitals data: {str(e)}"}), 400
@@ -30,15 +30,15 @@ def get_all_hospitals():
 @app.route('/api/v1/hospitals/<id_hospital>', methods=['GET'])
 def get_one_hospital(id_hospital):
     try:
-        hospital = Hospital.find(id_hospital)
+        hospital = HospitalController.find(id_hospital)
         return jsonify(hospital.to_json), 200
     except Exception as e:
         return jsonify({"message": f"Error getting hospital data: {str(e)}"}), 400
 
 @app.route('/api/v1/hospitals', methods=['POST'])
-def create_hospital():
+def create_hospital():  
     try:
-        hospital = Hospital.create(request.json)
+        hospital = HospitalController.create(request.json)
         db.session.add(hospital)
         db.session.commit()
         return jsonify({
@@ -51,7 +51,7 @@ def create_hospital():
 @app.route('/api/v1/hospitals/<id_hospital>', methods=['PUT'])
 def update_hospital(id_hospital):
     try:
-        hospital = Hospital.update(id_hospital, request.json)
+        hospital = HospitalController.update(id_hospital, request.json)
         db.session.commit()
         return jsonify({
             "message": f"Successfully updated hospital: {hospital.id}",
@@ -63,7 +63,7 @@ def update_hospital(id_hospital):
 @app.route('/api/v1/hospitals/<id_hospital>', methods=['DELETE'])
 def delete_hospital(id_hospital):
     try:
-        hospital = Hospital.find(id_hospital)
+        hospital = HospitalController.find(id_hospital)
         db.session.delete(hospital)
         db.session.commit()
         return jsonify({
