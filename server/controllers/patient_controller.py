@@ -29,5 +29,3 @@ class PatientController:
     if not payload.get('first_name', '').strip() or not payload.get('last_name', '').strip():
       raise MissingPatientData
     return True
-
-  # TODO: add validation for patient first and last_name (similar to hospital.name)
