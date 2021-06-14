@@ -4,3 +4,7 @@ class PatientHospitalMismatch(Exception):
 
 class MissingHospitalName(Exception):
   """ Raised when hospital payload is missing a name """
+
+
+class MissingPatientData(Exception):
+  """ Raised when patient payload is missing a first or last name """
