@@ -1,3 +1,23 @@
+.patient-index {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.patient-form {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.patient-form-section {
+  margin-bottom: 10px;
+}
+
+.primary-btn {
+  margin: 5px
+}
+
 .App {
   text-align: center;
 }

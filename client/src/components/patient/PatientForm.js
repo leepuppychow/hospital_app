@@ -67,27 +67,36 @@ export default class PatientForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <label>Hospital:</label>
-        <select
-          value={this.state.selectedHospitalId}
-          onChange={this.selectedHospitalChanged}
-          disabled={this.props.patient}
+      <div className="patient-form">
+        <div className="patient-form-section">
+          <label>Hospital:</label>
+          <select
+            value={this.state.selectedHospitalId}
+            onChange={this.selectedHospitalChanged}
+            disabled={this.props.patient}
+          >
+            {this.props.hospitals.map(hospital => (
+              <option
+                key={hospital.id}
+                value={hospital.id}
+              >
+                {hospital.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="patient-form-section">
+          <label>First Name:</label>
+          <input type="text" value={this.state.firstName} onChange={this.firstNameChanged}/>
+        </div>
+        <div className="patient-form-section">
+          <label>Last Name:</label>
+          <input type="text" value={this.state.lastName} onChange={this.lastNameChanged}/>
+        </div>
+        <button 
+          className="primary-btn"
+          onClick={this.createOrUpdate}
         >
-          {this.props.hospitals.map(hospital => (
-            <option
-              key={hospital.id}
-              value={hospital.id}
-            >
-              {hospital.name}
-            </option>
-          ))}
-        </select>
-        <label>First Name:</label>
-        <input type="text" value={this.state.firstName} onChange={this.firstNameChanged}/>
-        <label>Last Name:</label>
-        <input type="text" value={this.state.lastName} onChange={this.lastNameChanged}/>
-        <button onClick={this.createOrUpdate}>
           {this.props.patient ? 'Edit Patient' : 'Create New Patient'}
         </button>
       </div>

@@ -58,7 +58,7 @@ export default class PatientIndex extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="patient-index">
         <h2>Patient Index</h2>
         <PatientForm 
           patient={this.state.selectedPatient}
@@ -66,7 +66,12 @@ export default class PatientIndex extends React.Component {
           createHandler={this.createPatientHandler}
           editHandler={this.editPatientHandler}
         />
-        <button onClick={() => this.clearSelectedPatient()}>Clear Form</button>
+        <button 
+          className="primary-btn"
+          onClick={() => this.clearSelectedPatient()}
+        >
+          Clear Form
+        </button>
         <h5>*** TODO: add filtering and sorting functionality ***</h5>
         {this.patients.map(patient => (
           <PatientCard
