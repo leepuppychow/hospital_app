@@ -35,10 +35,6 @@ export default class PatientIndex extends React.Component {
     this.setState({selectedPatient: patient});
   }
 
-  clearSelectedPatient() {
-    this.setState({selectedPatient: null});
-  }
-
   async deletePatientHandler(patient) {
     if (window.confirm("Are you sure you want to delete this patient?")) {
       await deletePatient(patient);
@@ -66,12 +62,6 @@ export default class PatientIndex extends React.Component {
           createHandler={this.createPatientHandler}
           editHandler={this.editPatientHandler}
         />
-        <button 
-          className="primary-btn"
-          onClick={() => this.clearSelectedPatient()}
-        >
-          Clear Form
-        </button>
         <h5>*** TODO: add filtering and sorting functionality ***</h5>
         {this.patients.map(patient => (
           <PatientCard

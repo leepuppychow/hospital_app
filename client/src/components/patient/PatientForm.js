@@ -9,6 +9,7 @@ export default class PatientForm extends React.Component {
       firstName: '',
       lastName: '',
       selectedHospitalId: '',
+      selectedPatient: null,
     }
 
     this.firstNameChanged = this.firstNameChanged.bind(this);
@@ -22,12 +23,22 @@ export default class PatientForm extends React.Component {
       this.updateForSelectedPatient();
     }
   }
+
+  clearSelectedPatient() {
+    this.setState({
+      firstName: '',
+      lastName: '',
+      selectedHospitalId: '',
+      selectedPatient: null,
+    });
+  }
   
   updateForSelectedPatient() {
     this.setState({
       firstName: this.props.patient ? this.props.patient.first_name : '',
       lastName: this.props.patient ? this.props.patient.last_name : '',
       selectedHospitalId: this.props.patient ? this.props.patient.hospital.id : '',
+      selectedPatient: this.props.patient,
     })
   }
 
@@ -73,7 +84,7 @@ export default class PatientForm extends React.Component {
           <select
             value={this.state.selectedHospitalId}
             onChange={this.selectedHospitalChanged}
-            disabled={this.props.patient}
+            disabled={this.state.selectedPatient}
           >
             {this.props.hospitals.map(hospital => (
               <option
@@ -97,7 +108,13 @@ export default class PatientForm extends React.Component {
           className="primary-btn"
           onClick={this.createOrUpdate}
         >
-          {this.props.patient ? 'Edit Patient' : 'Create New Patient'}
+          {this.state.selectedPatient ? 'Edit Patient' : 'Create New Patient'}
+        </button>
+        <button 
+          className="primary-btn"
+          onClick={() => this.clearSelectedPatient()}
+        >
+          Clear Form
         </button>
       </div>
     )
