@@ -15,14 +15,14 @@ export default class App extends React.Component {
     this.state = {
       hospitals: [],
     }
-    this.reloadHospitalData = this.reloadHospitalData.bind(this);
+    this.loadHospitalData = this.loadHospitalData.bind(this);
   }
 
   async componentDidMount() {
-    this.reloadHospitalData();
+    this.loadHospitalData();
   }
 
-  async reloadHospitalData() {
+  async loadHospitalData() {
     try {
       const res = await getHospitals();
       if (res.data) this.setState({hospitals: res.data});
@@ -52,7 +52,7 @@ export default class App extends React.Component {
               render={() => (
                 <HospitalIndex
                   hospitals={this.state.hospitals}
-                  reload={this.reloadHospitalData}
+                  reload={this.loadHospitalData}
                 />
               )}
             />
@@ -61,7 +61,7 @@ export default class App extends React.Component {
               render={() => (
                 <PatientIndex 
                   hospitals={this.state.hospitals}
-                  reload={this.reloadHospitalData}
+                  reload={this.loadHospitalData}
                 />
               )}
             />
