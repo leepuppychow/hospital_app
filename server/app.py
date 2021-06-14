@@ -12,7 +12,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from controllers import HospitalController, PatientController
+from controllers import (
+    HospitalController,
+    PatientController,
+    PatientHospitalMismatch,
+)
 
 
 @app.route('/api/v1/ping', methods=["GET"])
@@ -79,3 +83,63 @@ def get_all_hospital_patients(id_hospital):
         return jsonify([patient.to_json for patient in hospital.patients]), 200
     except Exception as e:
         return jsonify({"message": f"Error getting patients for hospital {id_hospital}: {str(e)}"}), 400
+
+@app.route('/api/v1/hospitals/<id_hospital>/patients/<id_patient>', methods=['GET'])
+def get_one_patient_from_hospital(id_hospital, id_patient):
+    try:
+        hospital = HospitalController.find(id_hospital)
+        patient = PatientController(hospital).find(id_patient)
+        return jsonify(patient.to_json)
+    except PatientHospitalMismatch:
+        return jsonify({"message": f"Patient {id_patient} not found in hospital {id_hospital}"}), 404
+    except Exception as e:
+        return jsonify({"message": f"Error getting patient for hospital {id_hospital}: {str(e)}"}), 400
+
+@app.route('/api/v1/hospitals/<id_hospital>/patients', methods=['POST'])
+def create_hospital_patient(id_hospital):
+    try:
+        hospital = HospitalController.find(id_hospital)
+        patient = PatientController(hospital).create(request.json)
+        db.session.add(patient)
+        db.session.commit()
+        return jsonify({
+            "message": f"Successfully created patient: {patient.id}",
+            "patient": patient.to_json,
+        }), 201
+    except Exception as e:
+        return jsonify({"message": f"Error creating patient: {str(e)}"}), 400
+
+@app.route('/api/v1/hospitals/<id_hospital>/patients/<id_patient>', methods=['PUT'])
+def update_hospital_patient(id_hospital, id_patient):
+    try:
+        hospital = HospitalController.find(id_hospital)
+        patient = PatientController(hospital).update(id_patient, request.json)
+        db.session.commit()
+        return jsonify({
+            "message": f"Successfully updated patient: {patient.id}",
+            "patient": patient.to_json,
+        }), 200
+    except PatientHospitalMismatch:
+        return jsonify({"message": f"Patient {id_patient} not found in hospital {id_hospital}"}), 404
+    except Exception as e:
+        return jsonify({"message": f"Error updating patient for hospital {id_hospital}: {str(e)}"}), 400
+
+@app.route('/api/v1/hospitals/<id_hospital>/patients/<id_patient>', methods=['DELETE'])
+def delete_hospital_patient(id_hospital, id_patient):
+    try:
+        hospital = HospitalController.find(id_hospital)
+        patient = PatientController(hospital).find(id_patient)
+        db.session.delete(patient)
+        db.session.commit()
+        return jsonify({
+            "message": f"Successfully deleted patient: {id_patient}",
+        }), 200
+    except PatientHospitalMismatch:
+        return jsonify({"message": f"Patient {id_patient} not found in hospital {id_hospital}"}), 404
+    except Exception as e:
+        return jsonify({"message": f"Error deleting patient for hospital {id_hospital}: {str(e)}"}), 400
+
+
+
+
+
