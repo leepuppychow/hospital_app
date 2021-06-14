@@ -62,7 +62,7 @@ export default class PatientForm extends React.Component {
   }
 
   get firstHospitalId() {
-    return this.props.hospitals[0].id;
+    return this.props.hospitals ? this.props.hospitals[0].id : null;
   }
 
   render() {
