@@ -26,6 +26,17 @@ class Hospital(db.Model):
   def find(cls, id):
     return cls.query.get_or_404(id)
 
+  @classmethod
+  def create(cls, payload):
+    return cls(payload.get('name'), payload.get('address'))
+
+  @classmethod
+  def update(cls, id, payload):
+    hospital = cls.find(id)
+    hospital.name = payload.get('name')
+    hospital.address = payload.get('address')
+    return hospital
+
   @property
   def to_json(self):
     return {
