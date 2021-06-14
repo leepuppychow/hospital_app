@@ -15,6 +15,9 @@ migrate = Migrate(app, db)
 from controllers import (
     HospitalController,
     PatientController,
+)
+from exceptions import (
+    MissingHospitalName,
     PatientHospitalMismatch,
 )
 
@@ -49,6 +52,8 @@ def create_hospital():
             "message": f"Successfully created hospital: {hospital.id}",
             "hospital": hospital.to_json,
         }), 201
+    except MissingHospitalName:
+        return jsonify({"message": "Hospital name is required."}), 400
     except Exception as e:
         return jsonify({"message": f"Error creating hospital: {str(e)}"}), 400
 
@@ -61,6 +66,8 @@ def update_hospital(id_hospital):
             "message": f"Successfully updated hospital: {hospital.id}",
             "hospital": hospital.to_json,
         }), 200
+    except MissingHospitalName:
+        return jsonify({"message": "Hospital name is required."}), 400
     except Exception as e:
         return jsonify({"message": f"Error updating hospital data: {str(e)}"}), 400
 
