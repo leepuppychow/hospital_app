@@ -20,8 +20,9 @@ Note, I was using:
 Note, I was using:
 * Node 14.17.0
 
-1. Install dependencies: `npm install`
-2. Start frontend application: `npm start`
+1. From `./client` directory
+2. Install dependencies: `npm install`
+3. Start frontend application: `npm start`
 
 
 ## TODOS
