@@ -1,9 +1,6 @@
 from models import Patient
+from exceptions import PatientHospitalMismatch
 
-
-class PatientHospitalMismatch(Exception):
-  """ Raised when the patient found does not belong to the appropriate hospital """
-  
 
 class PatientController:
   def __init__(self, hospital):
@@ -25,3 +22,5 @@ class PatientController:
     patient.first_name = payload.get('first_name')
     patient.last_name = payload.get('last_name')
     return patient
+
+  # TODO: add validation for patient first and last_name (similar to hospital.name)
