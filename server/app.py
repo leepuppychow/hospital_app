@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from controllers import HospitalController
+from controllers import HospitalController, PatientController
 
 
 @app.route('/api/v1/ping', methods=["GET"])
@@ -71,3 +71,11 @@ def delete_hospital(id_hospital):
         }), 200
     except Exception as e:
         return jsonify({"message": f"Error deleting hospital: {str(e)}"}), 400
+
+@app.route('/api/v1/hospitals/<id_hospital>/patients', methods=['GET'])
+def get_all_hospital_patients(id_hospital):
+    try:
+        hospital = HospitalController.find(id_hospital)
+        return jsonify([patient.to_json for patient in hospital.patients]), 200
+    except Exception as e:
+        return jsonify({"message": f"Error getting patients for hospital {id_hospital}: {str(e)}"}), 400
