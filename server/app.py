@@ -19,6 +19,7 @@ from controllers import (
 from exceptions import (
     MissingHospitalName,
     PatientHospitalMismatch,
+    MissingPatientData,
 )
 
 
@@ -113,6 +114,8 @@ def create_hospital_patient(id_hospital):
             "message": f"Successfully created patient: {patient.id}",
             "patient": patient.to_json,
         }), 201
+    except MissingPatientData:
+        return jsonify({"message": "Patient first and last name are required."}), 400
     except Exception as e:
         return jsonify({"message": f"Error creating patient: {str(e)}"}), 400
 
@@ -126,6 +129,8 @@ def update_hospital_patient(id_hospital, id_patient):
             "message": f"Successfully updated patient: {patient.id}",
             "patient": patient.to_json,
         }), 200
+    except MissingPatientData:
+        return jsonify({"message": "Patient first and last name are required."}), 400
     except PatientHospitalMismatch:
         return jsonify({"message": f"Patient {id_patient} not found in hospital {id_hospital}"}), 404
     except Exception as e:
